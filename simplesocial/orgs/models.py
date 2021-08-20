@@ -17,7 +17,7 @@ class Org(models.Model):
     slug = models.SlugField(allow_unicode=True, unique=True)
     description = models.TextField(blank=True, default='')
     description_html = models.TextField(editable=False, default='', blank=True)
-    members = models.ManyToManyField(User, through='GroupMember')
+    members = models.ManyToManyField(User, through='OrgMember')
 
     def __str__(self):
         return self.name
@@ -34,11 +34,11 @@ class Org(models.Model):
         ordering = ['name']
 
 class OrgMember(models.Model):
-    org = models.ForeignKey(Org, related_name='memberships')
-    user = models.ForeignKey(User, related_name='user_orgs')
+    org = models.ForeignKey(Org, related_name='memberships', on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(User, related_name='user_orgs', on_delete=models.DO_NOTHING)
 
     def __str__(self):
         return self.user.username
 
     class Meta:
-        unique_together = ('group', 'user')
+        unique_together = ('org', 'user')

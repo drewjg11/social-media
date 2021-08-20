@@ -11,11 +11,11 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 class Project(models.Model):
-    user = models.ForeignKey(User, related_name='projects')
+    user = models.ForeignKey(User, related_name='projects', on_delete=models.DO_NOTHING)
     created_at = models.DateTimeField(auto_now=True)
     item = models.TextField()
     item_html = models.TextField(editable=False)
-    group = models.ForeignKey(Group, related_name='posts', null=True, blank=True)
+    org = models.ForeignKey(Org, related_name='posts', null=True, blank=True, on_delete=models.DO_NOTHING)
 
     def __str__(self):
         return self.item
@@ -29,4 +29,4 @@ class Project(models.Model):
 
     class Meta:
         ordering = ['-created_at']
-        unique_together = ['user', 'message']
+        unique_together = ['user', 'item']
